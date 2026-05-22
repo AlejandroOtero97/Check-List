@@ -1,0 +1,263 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .page-wrap {
+    min-height: 100vh;
+    width: 100%;
+    background: #fdf9f0;
+    background-image: repeating-linear-gradient(transparent, transparent 31px, #c5d8f0 31px, #c5d8f0 32px);
+    background-position: 0 48px;
+    font-family: 'Patrick Hand', cursive, sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+  .red-margin {
+    position: absolute;
+    left: 72px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: rgba(220, 80, 80, 0.45);
+    z-index: 1;
+  }
+  .hole {
+    position: absolute;
+    left: 20px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #e8dfc8;
+    border: 1.5px solid #c8bfaa;
+    z-index: 2;
+  }
+  .title-area {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 18px 0 6px;
+    line-height: 32px;
+  }
+  .title-area h1 {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 36px;
+    font-weight: 700;
+    color: #2a3a5c;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.06);
+  }
+  .subtitle {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 17px;
+    color: #8899bb;
+    margin-top: 2px;
+  }
+  .columns {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 8px 20px 4px 84px;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    height: 32px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid rgba(197, 216, 240, 0.35);
+    transition: background 0.15s;
+  }
+  .col-right .item {
+    border-left: 1.5px solid rgba(197, 216, 240, 0.5);
+  }
+  .item:hover { background: rgba(197, 216, 240, 0.18); }
+  .checkbox {
+    width: 18px; height: 18px;
+    border: 2px solid #8899bb;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.7);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .item.checked .checkbox { border-color: #3a7d44; background: #e8f5ec; }
+  .checkmark { display: none; color: #3a7d44; font-size: 18px; font-weight: 900; line-height: 1; margin-top: -1px; }
+  .item.checked .checkmark { display: block; }
+  .label {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 20px;
+    color: #2a3a5c;
+    transition: color 0.15s;
+    flex: 1;
+  }
+  .item.checked .label { color: #999; text-decoration: line-through; text-decoration-color: #aaa; }
+
+  .optional-header {
+    position: relative;
+    z-index: 3;
+    padding: 6px 20px 0 84px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .optional-header .spacer { }
+  .optional-header .opt-label {
+    border-left: 1.5px solid rgba(197, 216, 240, 0.5);
+    padding: 0 12px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 17px;
+    color: #b07030;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(197, 216, 240, 0.35);
+  }
+
+  .opt-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    height: 32px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid rgba(197, 216, 240, 0.25);
+    transition: background 0.15s;
+    opacity: 0.75;
+    border-left: 1.5px solid rgba(197, 216, 240, 0.5);
+  }
+  .opt-item:hover { background: rgba(240, 220, 180, 0.15); }
+  .opt-checkbox {
+    width: 18px; height: 18px;
+    border: 2px dashed #c8a060;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.5);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .opt-item.checked .opt-checkbox { border-color: #b07030; background: #fdf0dc; border-style: solid; }
+  .opt-checkmark { display: none; color: #b07030; font-size: 18px; font-weight: 900; line-height: 1; margin-top: -1px; }
+  .opt-item.checked .opt-checkmark { display: block; }
+  .opt-label-text {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 18px;
+    color: #7a6040;
+    flex: 1;
+    font-style: italic;
+  }
+  .opt-item.checked .opt-label-text { color: #bba080; text-decoration: line-through; text-decoration-color: #c8a060; }
+
+  .opt-cols {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 20px 4px 84px;
+  }
+
+  .progress-area {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 20px 14px 84px;
+  }
+  .progress-bar-bg {
+    flex: 1; height: 10px;
+    background: rgba(197, 216, 240, 0.5);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(197, 216, 240, 0.8);
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: #3a7d44;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+  .progress-label {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 17px;
+    color: #8899bb;
+    min-width: 60px;
+    text-align: right;
+  }
+</style>
+
+<div class="page-wrap">
+  <div class="red-margin"></div>
+  <div class="hole" style="top: 14vh;"></div>
+  <div class="hole" style="top: 50vh;"></div>
+  <div class="hole" style="top: 83vh;"></div>
+
+  <div class="title-area">
+    <h1>🚴 Maratón CheckList</h1>
+    <div class="subtitle">Marcá todo antes de salir a rodar</div>
+  </div>
+
+  <div class="columns">
+    <div class="col-left">
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Casco</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Guantes</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Anteojos/Gafas</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Remera/s</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Calza</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Zapatilla/s</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Medias</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Cuello Polar</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Botella de Agua</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Gel energético</span></div>
+    </div>
+    <div class="col-right">
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Mochila</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Billetera</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Sube</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Celular cargado</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">Ropa Extra</span></div>
+      <div class="item" onclick="toggle(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="label">GANAS DE ROMPERLA OOOUUUUU</span></div>
+    </div>
+  </div>
+
+  <div class="optional-header">
+    <div class="spacer"></div>
+    <div class="opt-label">opcionales</div>
+  </div>
+
+  <div class="opt-cols">
+    <div></div>
+    <div>
+      <div class="opt-item" onclick="toggleOpt(this)"><div class="opt-checkbox"><span class="opt-checkmark">✓</span></div><span class="opt-label-text">Comida extra</span></div>
+      <div class="opt-item" onclick="toggleOpt(this)"><div class="opt-checkbox"><span class="opt-checkmark">✓</span></div><span class="opt-label-text">Auriculares</span></div>
+      <div class="opt-item" onclick="toggleOpt(this)"><div class="opt-checkbox"><span class="opt-checkmark">✓</span></div><span class="opt-label-text">Ropa de cambio</span></div>
+    </div>
+  </div>
+
+  <div class="progress-area">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="bar"></div></div>
+    <div class="progress-label" id="prog-label">0 / 16</div>
+  </div>
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('checked');
+    updateProgress();
+  }
+  function toggleOpt(el) {
+    el.classList.toggle('checked');
+  }
+  function updateProgress() {
+    const total = document.querySelectorAll('.item').length;
+    const done = document.querySelectorAll('.item.checked').length;
+    document.getElementById('bar').style.width = (done / total * 100) + '%';
+    document.getElementById('prog-label').textContent = done + ' / ' + total;
+  }
+</script>
